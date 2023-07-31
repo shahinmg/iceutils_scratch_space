@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from rasterio.plot import show
 from matplotlib import colors, cm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+import numpy as np
 fig1, (ax1,ax2) = plt.subplots(1,2,figsize=(15,7),sharey=False)
 
 td_r = rasterio.open('../output/S2A_24WWU_20190807_0_L1C_X_S2A_24WWU_20190817_0_L1C_G0120V02_P082_driving_stress.tif')
@@ -35,13 +35,17 @@ fig1.colorbar(cm.ScalarMappable(norm=colors.Normalize(vmin = vmin,vmax = vmax), 
 
 
 #plot driving stress
-fig2, ax_td = plt.subplots()
+fig2, ax_td = plt.subplots(figsize=(6,4))
 driving_stress_plot = show((td_r,1),ax=ax_td,cmap='viridis',vmin=0,vmax=50000,title='t_dx')
 
 divider2 = make_axes_locatable(ax_td)
 cax2 = divider2.append_axes("right", size="5%", pad=0.1)
 fig2.colorbar(cm.ScalarMappable(norm=colors.Normalize(vmin = 0,vmax = 50000), cmap='viridis'),
               cax=cax2,label='t_dx')
+
+start, end = ax_td.get_xlim()
+
+ax_td.xaxis.set_ticks(np.arange(start, end, 3000))
 
 plt.tight_layout()
 td_r.close()
